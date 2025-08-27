@@ -66,7 +66,7 @@ Follow these steps to set up the project locally on your machine.
 Make sure you have the following installed on your machine:
 
 - [Git](https://git-scm.com/)
-- [Docker]
+- [Docker](https://docs.docker.com/engine/install)
 
 **Cloning the Repository**
 
@@ -77,9 +77,6 @@ cd resumind
 
 **Running the project**
 
-
-
-**Running the Project**
 
 ```bash
 docker compose up
