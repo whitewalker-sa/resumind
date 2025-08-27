@@ -1,11 +1,11 @@
-import { prepareInstructions } from '../../constants';
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router';
-import FileUploader from '~/components/FileUploader';
 import Navbar from '~/components/Navbar';
-import { convertPdfToImage } from '~/lib/pdf2img';
+import FileUploader from '~/components/FileUploader';
 import { usePuterStore } from '~/lib/puter';
+import { useNavigate } from 'react-router';
+import { convertPdfToImage } from '~/lib/pdf2img';
 import { generateUUID } from '~/lib/utils';
+import { prepareInstructions } from '../../constants';
 
 
 
@@ -19,7 +19,7 @@ const Upload = () => {
     const handleFileSelect = (file: File | null) => {
         setFile(file);
     };
-  
+
     const handleAnalyze = async ({ companyName, jobTitle, jobDescription, file }: { companyName: string, jobTitle: string, jobDescription: string, file: File; }) => {
         setProcessing(true);
 
@@ -52,24 +52,28 @@ const Upload = () => {
             uploadedFile.path,
             prepareInstructions({ jobTitle, jobDescription })
         );
+
         if (!feedback) return setStatusText('Error: Failed to analyze resume');
 
         const feedbackText = typeof feedback.message.content === 'string'
             ? feedback.message.content
             : feedback.message.content[0].text;
 
+        console.log(feedbackText); 
+
         data.feedback = JSON.parse(feedbackText);
         await kv.set(`resume:${uuid}`, JSON.stringify(data));
         setStatusText('Analysis complete, redirecting...');
+        console.log(data);
         navigate(`/resume/${uuid}`);
-    }
+    };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget.closest("form");
-
         if (!form) return;
         const formData = new FormData(form);
+
         const companyName: any = formData.get("company-name");
         const jobTitle: any = formData.get("job-title");
         const jobDescription: any = formData.get("job-description");
@@ -78,8 +82,6 @@ const Upload = () => {
 
         handleAnalyze({ companyName, jobTitle, jobDescription, file });
     };
-
-
 
     return (
         <main className="bg-[url('/images/bg-main.svg')] bg-cover">

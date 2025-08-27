@@ -5,11 +5,11 @@ import Details from "~/components/Details";
 import Summary from "~/components/Summary";
 import { usePuterStore } from "~/lib/puter";
 
-
 export const meta = () => ([
     { title: "Resumind | Review" },
     { name: "description", content: "Detailed overview" }
 ]);
+
 const Resume = () => {
     const { auth, isLoading, fs, kv } = usePuterStore();
     const { id } = useParams();
@@ -44,12 +44,12 @@ const Resume = () => {
             setImageUrl(imageUrl);
 
             setFeedback(data.feedback);
+            console.log({ resumeUrl, imageUrl, feedback: data.feedback });
         };
 
         loadResume();
-        console.log({ resumeUrl, imageUrl, feedback: data.feedback });
-
     }, [id]);
+
     return (
         <div>
             <main className="!pt-10">
@@ -74,11 +74,11 @@ const Resume = () => {
                         {feedback ? (
                             <div className="flex flex-col gap-8 animate-in fade-in duration-1000">
                                 <Summary feedback={feedback} />
-                                <ATS score={feedback.padStart.score || 0} suggestions={feedback.ATS.tips || []} />
+                                <ATS score={feedback.ATS.score || 0} suggestions={feedback.ATS.tips || []} />
                                 <Details feedback={feedback} />
                             </div>
                         ) : (
-                            <img src="/images/resume-scan-2.gif" alt="resume-scan" className="w-full" />
+                            <img src="/images/resume-scan-2.gif" className="w-full" />
 
                         )}
                     </section>
